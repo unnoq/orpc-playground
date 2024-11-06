@@ -1,4 +1,4 @@
-import { appRouter } from '@/src/api'
+import { appRouter } from '@/src/server'
 import { createFetchHandler } from '@orpc/server/fetch'
 
 const handler = createFetchHandler({
