@@ -1,9 +1,9 @@
-import { ios } from '@orpc/server'
+import { os } from '@orpc/server'
 import { createFetchHandler } from '@orpc/server/fetch'
 import { z } from 'zod'
 import { userContract } from './contract'
 
-export const globalMiddleware = ios
+export const globalMiddleware = os
   .context<{ request: Request }>()
   .middleware(async (_, context, meta) => {
     const start = Date.now()
@@ -18,13 +18,13 @@ export const globalMiddleware = ios
 
 /**
  * The `os` builder with the request context.
- * You can use `ios` directly if you don't need the context.
+ * You can use `os` directly if you don't need the context.
  */
-export const os = ios.context<{ request: Request }>().use(globalMiddleware)
-export const osUser = os.contract(userContract)
+export const osw = os.context<{ request: Request }>().use(globalMiddleware)
+export const osUser = osw.contract(userContract)
 
 // Visit http://localhost:3000/api/ping?name=ORPC
-export const ping = os
+export const ping = osw
   // .route({path: '/ping', method: 'GET'})
   .input(z.object({ name: z.string().default('UNKNOWN') }))
   .output(z.string())
@@ -40,7 +40,7 @@ export const userFind = osUser.find.handler((input, _context, _meta) => {
   }
 })
 
-export const appRouter = os.router({
+export const appRouter = osw.router({
   ping,
   user: osUser.router({
     find: userFind,
